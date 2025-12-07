@@ -1,5 +1,10 @@
-# Build stage
-FROM node:23-alpine
+# ============================
+# Build
+# ============================
+
+# Build stage. We use a builder and runner step.
+# Tailwind only needed in the build step
+FROM node:23-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -10,14 +15,26 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm ci
 
-# Install serve
-RUN npm i -g serve
-
 # Copy source code
 COPY . ./
 
 # Build
 RUN npm run build
+
+# ============================
+# Serve
+# ============================
+# Serve the build
+FROM node:23-alpine AS runner
+
+# Set working directory
+WORKDIR /app
+
+# Install serve
+RUN npm i -g serve
+
+# Copy only the built artifacts from the builder stage
+COPY --from=builder /app/dist ./dist
 
 # Open port 3000
 EXPOSE 3000
