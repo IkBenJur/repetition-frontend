@@ -18,6 +18,12 @@ RUN npm ci
 # Copy source code
 COPY . ./
 
+# Declare ARG to receive Railway environment variables
+ARG VITE_API_URL
+
+# Set as ENV so Vite can access it during build
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build
 RUN npm run build
 
