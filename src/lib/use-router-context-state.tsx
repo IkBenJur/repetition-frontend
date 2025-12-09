@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { type UserToken, type RouterContext } from "../routes/__root";
-import { QueryClient } from "@tanstack/react-query";
+import { type UserToken } from "../routes/__root";
 
-export function useRouterContextState(): RouterContext {
+export function useRouterContextState() {
     const [userToken, setUserToken] = useState<UserToken>(() => {
         const savedToken = localStorage.getItem("userToken") as UserToken;
         return savedToken || null;
@@ -12,18 +11,18 @@ export function useRouterContextState(): RouterContext {
     useEffect(() => {
         if (userToken) {
             localStorage.setItem("userToken", userToken);
+            setIsAuthenticated(true);
         } else {
             localStorage.removeItem("userToken")
+            setIsAuthenticated(false);
         }
     }, [userToken]);
 
     const login = (newUserToken: string) => {
-        setIsAuthenticated(true);
         setUserToken(newUserToken);
     };
 
     const logout = () => {
-        setIsAuthenticated(false);
         setUserToken(null);
     };
 
@@ -31,7 +30,6 @@ export function useRouterContextState(): RouterContext {
         isAuthenticated,
         login,
         logout,
-        queryClient: new QueryClient(),
         userToken: userToken
     }
 }

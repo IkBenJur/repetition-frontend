@@ -11,8 +11,8 @@ const router = createRouter({
     queryClient,
     userToken: null,
     isAuthenticated: false,
-    login: () => {},
-    logout: () => {},
+    login: () => { },
+    logout: () => { },
   },
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
@@ -29,7 +29,12 @@ function App() {
   const routerContextState = useRouterContextState();
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} context={routerContextState} />
+      <RouterProvider 
+      router={router} 
+      context={{
+        queryClient,
+        ...routerContextState
+      }} />
     </QueryClientProvider>
   )
 }

@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query';
 
@@ -56,11 +56,15 @@ function RouteComponent() {
   const { login } = Route.useRouteContext();
   const navigate = Route.useNavigate();
   const search = Route.useSearch();
+  const router = useRouter();
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       login(data.token);
+
+      await router.invalidate();
+
       navigate({ to: search.redirect })
     },
     onError: (error) => {
