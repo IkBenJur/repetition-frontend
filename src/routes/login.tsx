@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import z from 'zod'
 import { useMutation } from '@tanstack/react-query';
+import { env } from '../lib/env';
 
 
 export const Route = createFileRoute('/login')({
@@ -34,7 +35,7 @@ interface LoginResponse {
 }
 
 const loginUser = async ({ username, password }: LoginCredentials): Promise<LoginResponse> => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+  const response = await fetch(`${env.apiUrl}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
