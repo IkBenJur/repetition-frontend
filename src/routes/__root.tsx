@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import { Outlet, createRootRouteWithContext, useLocation } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
+import { NavLink } from './-components/nav-link'
 
 export type UserToken = string | null
 
@@ -17,9 +18,37 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function RootComponent() {
+  const { isAuthenticated, logout } = Route.useRouteContext()
+  const navigate = Route.useNavigate()
+  const location = useLocation();
+
   return (
     <React.Fragment>
-      <Outlet />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-black">
+
+        <header className="absolute top-0 right-0 p-6">
+          {isAuthenticated ? (
+            <button
+              onClick={() => {
+                logout();
+                navigate({ to: "/login", search: { redirect: location.href } })
+              }}
+              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-blue-500/50"
+            >
+              Sign out
+            </button>
+          ) : (
+            <NavLink
+              className="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-blue-500/50"
+              to="/login">
+              Login
+            </NavLink>
+          )}
+        </header>
+
+        <Outlet />
+
+      </div>
     </React.Fragment>
   )
 }

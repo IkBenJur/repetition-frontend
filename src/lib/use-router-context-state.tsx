@@ -7,6 +7,7 @@ export function useRouterContextState(): RouterContext {
         const savedToken = localStorage.getItem("userToken") as UserToken;
         return savedToken || null;
     });
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!userToken);
 
     useEffect(() => {
         if (userToken) {
@@ -17,15 +18,17 @@ export function useRouterContextState(): RouterContext {
     }, [userToken]);
 
     const login = (newUserToken: string) => {
+        setIsAuthenticated(true);
         setUserToken(newUserToken);
     };
 
     const logout = () => {
+        setIsAuthenticated(false);
         setUserToken(null);
     };
 
     return {
-        isAuthenticated: !!userToken,
+        isAuthenticated,
         login,
         logout,
         queryClient: new QueryClient(),
