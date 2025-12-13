@@ -19,7 +19,6 @@ function RouteComponent() {
           </div>
         </div>
 
-        {/* Optional: Footer or additional info */}
         <div className="absolute bottom-6 left-0 right-0 text-center text-blue-300/60 text-sm">
           {isAuthenticated ? "Welcome back!" : "Please login to continue"}
         </div>
