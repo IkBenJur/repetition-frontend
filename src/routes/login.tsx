@@ -88,43 +88,53 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 p-6">
-        <h1 className="text-2xl font-bold">Login</h1>
+    <div className="flex-1 flex items-center justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 p-6">
+        <h1 className="text-3xl font-bold text-center">Login</h1>
         
-        <div>
+        <div className="form-control">
           <input
             type='text'
             placeholder='Username'
             name="username"
             autoFocus
             required
-            className="w-full rounded border px-3 py-2"
+            className="input input-bordered w-full"
           />
         </div>
 
-        <div>
+        <div className="form-control">
           <input
             type='password'
             placeholder='Password'
             name="password"
             required
-            className="w-full rounded border px-3 py-2"
+            className="input input-bordered w-full"
           />
         </div>
 
         <button
           type="submit"
           disabled={loginMutation.isPending}
-          className="w-full rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
+          className="btn btn-primary w-full"
         >
-          {loginMutation.isPending ? 'Logging in...' : 'Login'}
+          {loginMutation.isPending ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              Logging in...
+            </>
+          ) : (
+            'Login'
+          )}
         </button>
         
         {loginMutation.isError && (
-          <p className="rounded bg-red-50 p-3 text-sm text-red-700">
-            {loginMutation.error.message}
-          </p>
+          <div className="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{loginMutation.error.message}</span>
+          </div>
         )}
 
       </form>
