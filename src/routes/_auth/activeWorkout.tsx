@@ -54,7 +54,7 @@ function RouteComponent() {
   const { data } = useSuspenseQuery(activeUserWorkoutQuery(context.userToken!))
 
   return <Suspense fallback={<div>Loading...</div>}>
-    <div className='max-w-4xl max-auto p-6'>
+    <div className='max-w-4xl mx-auto p-6'>
 
       <div className='mb-8'>
         <h1 className='text-4xl font-bold mb-2'>{data.Name}</h1>
