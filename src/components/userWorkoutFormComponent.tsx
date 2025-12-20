@@ -31,9 +31,7 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
       ],
     };
 
-    createExerciseMutation.mutate(newExercise, {
-      onSuccess: (data) => console.log(data),
-    });
+    createExerciseMutation.mutate(newExercise);
   };
 
   return (
