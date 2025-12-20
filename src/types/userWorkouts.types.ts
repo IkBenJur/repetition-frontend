@@ -1,15 +1,4 @@
-export interface UserWorkoutExerciseSet {
-  ID: number;
-  Reps: number;
-  Weight: number;
-}
-
-export interface UserWorkoutExercise {
-  ID: number;
-  UserWorkoutId: number;
-  ExerciseId: number;
-  UserWorkoutExerciseSets: UserWorkoutExerciseSet[];
-}
+import type { UserWorkoutExercise } from "./userWorkoutExercise.types";
 
 export interface UserWorkout {
   ID: number;
