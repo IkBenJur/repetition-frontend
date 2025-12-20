@@ -3,6 +3,8 @@ import type { UserWorkout } from "../types/userWorkouts.types";
 import { Fragment } from "react";
 import { useCreateUserWorkoutExerciseMutation } from "../hooks/mutations/useUserWorkoutExerciseMutation";
 import type { UserWorkoutExercise } from "../types/userWorkoutExercise.types";
+import type { UserWorkoutExerciseSet } from "../types/userWorkoutExerciseSet.types";
+import { useCreateUserWorkoutExerciseSetMutation } from "../hooks/mutations/useUserWorkoutExerciseSetMutation";
 
 interface UserWorkoutFormProps {
   userWorkout: UserWorkout;
@@ -10,6 +12,7 @@ interface UserWorkoutFormProps {
 
 export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
   const createExerciseMutation = useCreateUserWorkoutExerciseMutation();
+  const createSetMutation = useCreateUserWorkoutExerciseSetMutation();
 
   const handleAddExercise = () => {
     const newExercise: UserWorkoutExercise = {
@@ -34,6 +37,16 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
     createExerciseMutation.mutate(newExercise);
   };
 
+  const handleAddSet = (exerciseId: number) => {
+    const newSet: UserWorkoutExerciseSet = {
+      UserWorkoutExerciseId: exerciseId,
+      Reps: 5,
+      Weight: 100,
+    };
+
+    createSetMutation.mutate(newSet);
+  };
+
   return (
     <Fragment>
       <div className="mb-8">
@@ -45,7 +58,7 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
 
       <div className="space-y-4">
         {userWorkout.UserWorkoutExercises.map((exercise) => (
-          <div key={exercise.ID} className="card bg-base-200 shadow-md">
+          <div key={exercise.ID} className="card bg-base-300 shadow-md">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-4">
                 {exercise.ExerciseId}
@@ -70,6 +83,37 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              <div className="card-actions">
+                <button
+                  onClick={() => handleAddSet(exercise.ID!)}
+                  disabled={createSetMutation.isPending}
+                  className="btn btn-block bg-base-200 hover:bg-base-100"
+                >
+                  {createSetMutation.isPending ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs"></span>
+                      Adding Set...
+                    </>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  )}
+                  Add set
+                </button>
               </div>
             </div>
           </div>

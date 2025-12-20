@@ -25,8 +25,8 @@ function RootComponent() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-screen bg-base-300">
-      <header className="navbar bg-base-100 shadow-lg px-6">
+    <div className="flex flex-col min-h-screen bg-base-neutral">
+      <header className="navbar bg-base-300 shadow-lg px-6">
         <div className="flex-1">
           <span className="text-2xl font-bold text-primary">Repetition</span>
         </div>

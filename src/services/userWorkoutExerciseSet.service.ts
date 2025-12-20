@@ -6,6 +6,6 @@ export const userWorkoutExerciseSetService = {
     userWorkoutExerciseSet: UserWorkoutExerciseSet,
   ): Promise<UserWorkoutExerciseSet> => {
     const api = getApiClient();
-    return api.post("userWorkoutExerciseSet", userWorkoutExerciseSet);
+    return api.post("/userWorkoutExerciseSet", userWorkoutExerciseSet);
   },
 };
