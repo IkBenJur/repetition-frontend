@@ -25,8 +25,7 @@ export const Route = createFileRoute("/_auth/activeWorkout")({
 });
 
 function RouteComponent() {
-  const context = Route.useRouteContext();
-  const { data } = useSuspenseActiveUserWorkout(context.userToken!);
+  const { data } = useSuspenseActiveUserWorkout();
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

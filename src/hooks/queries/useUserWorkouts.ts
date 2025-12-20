@@ -1,13 +1,13 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { userWorkoutService } from "../../services/userWorkout.service";
 
-export const activeUserWorkoutQuery = (jwt: string) => {
+export const activeUserWorkoutQuery = () => {
   return queryOptions({
-    queryKey: ["activeUserWorkout", jwt],
-    queryFn: () => userWorkoutService.getActiveWorkout(jwt),
+    queryKey: ["activeUserWorkout"],
+    queryFn: () => userWorkoutService.getActiveWorkout(),
   });
 };
 
-export const useSuspenseActiveUserWorkout = (jwt: string) => {
-  return useSuspenseQuery(activeUserWorkoutQuery(jwt));
+export const useSuspenseActiveUserWorkout = () => {
+  return useSuspenseQuery(activeUserWorkoutQuery());
 };
