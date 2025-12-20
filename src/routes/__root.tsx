@@ -1,23 +1,27 @@
-import { Outlet, createRootRouteWithContext, useLocation } from '@tanstack/react-router'
-import type { QueryClient } from '@tanstack/react-query'
+import {
+  Outlet,
+  createRootRouteWithContext,
+  useLocation,
+} from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
 
-export type UserToken = string | null
+export type UserToken = string | null;
 
 export type RouterContext = {
-  queryClient: QueryClient
-  userToken: UserToken,
-  isAuthenticated: boolean,
-  login: (newUserToken: string) => void,
-  logout: () => void
-}
+  queryClient: QueryClient;
+  userToken: UserToken;
+  isAuthenticated: boolean;
+  login: (newUserToken: string) => void;
+  logout: () => void;
+};
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  component: RootComponent
-})
+  component: RootComponent,
+});
 
 function RootComponent() {
-  const { isAuthenticated, logout } = Route.useRouteContext()
-  const navigate = Route.useNavigate()
+  const { isAuthenticated, logout } = Route.useRouteContext();
+  const navigate = Route.useNavigate();
   const location = useLocation();
 
   return (
@@ -31,7 +35,7 @@ function RootComponent() {
             <button
               onClick={() => {
                 logout();
-                navigate({ to: "/login", search: { redirect: location.href } })
+                navigate({ to: "/login", search: { redirect: location.href } });
               }}
               className="btn btn-primary"
             >
@@ -50,5 +54,5 @@ function RootComponent() {
 
       <Outlet />
     </div>
-  )
+  );
 }
