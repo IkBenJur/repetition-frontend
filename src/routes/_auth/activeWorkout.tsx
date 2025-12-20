@@ -27,7 +27,11 @@ function RouteComponent() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <UserWorkoutForm userWorkout={data} />
+      {data ? (
+        <UserWorkoutForm userWorkout={data} />
+      ) : (
+        <div>No active workout</div>
+      )}
     </div>
   );
 }
