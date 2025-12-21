@@ -6,7 +6,7 @@ interface exerciseSelectModalProps {
   exercises: Exercise[];
   isError: boolean;
   isLoading: boolean;
-  onSelect: (exerciseId: number) => void;
+  onSelect: (exerciseId: number, exerciseName: string) => void;
   closeFunction: () => void;
 }
 
@@ -22,6 +22,10 @@ export const ExerciseSelectModal = ({
     null,
   );
 
+  const selectedExerciseName =
+    exercises.find((exercise) => exercise.ID === selectedExerciseId)?.Name ||
+    "";
+
   const handleClose = () => {
     setSelectedExerciseId(null);
     closeFunction();
@@ -29,7 +33,7 @@ export const ExerciseSelectModal = ({
 
   const handleSelect = () => {
     if (selectedExerciseId === null) return;
-    onSelect(selectedExerciseId);
+    onSelect(selectedExerciseId, selectedExerciseName);
     setSelectedExerciseId(null);
     closeFunction();
   };

@@ -18,10 +18,11 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
   const createSetMutation = useCreateUserWorkoutExerciseSetMutation();
   const exerciseQuery = useGetAllExerciseQuery();
 
-  const handleAddExercise = (exerciseId: number) => {
+  const handleAddExercise = (exerciseId: number, exerciseName: string) => {
     const newExercise: UserWorkoutExercise = {
       UserWorkoutId: userWorkout.ID,
       ExerciseId: exerciseId,
+      ExerciseName: exerciseName,
       UserWorkoutExerciseSets: [],
     };
 
@@ -52,7 +53,7 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
           <div key={exercise.ID} className="card bg-base-300 shadow-md">
             <div className="card-body">
               <h2 className="card-title text-2xl mb-4">
-                {exercise.ExerciseId}
+                {exercise.ExerciseName}
               </h2>
 
               <div className="overflow-x-auto">
