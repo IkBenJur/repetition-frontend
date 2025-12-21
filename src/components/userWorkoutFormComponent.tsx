@@ -1,37 +1,28 @@
 import { formatDate } from "date-fns";
 import type { UserWorkout } from "../types/userWorkouts.types";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useCreateUserWorkoutExerciseMutation } from "../hooks/mutations/useUserWorkoutExerciseMutation";
 import type { UserWorkoutExercise } from "../types/userWorkoutExercise.types";
 import type { UserWorkoutExerciseSet } from "../types/userWorkoutExerciseSet.types";
 import { useCreateUserWorkoutExerciseSetMutation } from "../hooks/mutations/useUserWorkoutExerciseSetMutation";
+import { ExerciseSelectModal } from "./exercises/exerciseSelectModal";
+import { useGetAllExerciseQuery } from "../hooks/queries/useExercise";
 
 interface UserWorkoutFormProps {
   userWorkout: UserWorkout;
 }
 
 export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
+  const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
   const createExerciseMutation = useCreateUserWorkoutExerciseMutation();
   const createSetMutation = useCreateUserWorkoutExerciseSetMutation();
+  const exerciseQuery = useGetAllExerciseQuery();
 
-  const handleAddExercise = () => {
+  const handleAddExercise = (exerciseId: number) => {
     const newExercise: UserWorkoutExercise = {
       UserWorkoutId: userWorkout.ID,
-      ExerciseId: 1,
-      UserWorkoutExerciseSets: [
-        {
-          Reps: 10,
-          Weight: 50,
-        },
-        {
-          Reps: 10,
-          Weight: 50,
-        },
-        {
-          Reps: 10,
-          Weight: 50,
-        },
-      ],
+      ExerciseId: exerciseId,
+      UserWorkoutExerciseSets: [],
     };
 
     createExerciseMutation.mutate(newExercise);
@@ -119,8 +110,17 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
           </div>
         ))}
 
+        <ExerciseSelectModal
+          isOpen={isExerciseModalOpen}
+          exercises={exerciseQuery.data || []}
+          isError={exerciseQuery.isError}
+          isLoading={exerciseQuery.isLoading}
+          onSelect={handleAddExercise}
+          closeFunction={() => setIsExerciseModalOpen(false)}
+        />
+
         <button
-          onClick={handleAddExercise}
+          onClick={() => setIsExerciseModalOpen(true)}
           disabled={createExerciseMutation.isPending}
           className="btn btn-primary btn-block"
         >
