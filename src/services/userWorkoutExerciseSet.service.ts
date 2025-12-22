@@ -8,4 +8,14 @@ export const userWorkoutExerciseSetService = {
     const api = getApiClient();
     return api.post("/userWorkoutExerciseSet", userWorkoutExerciseSet);
   },
+
+  updateUserWorkoutExerciseSet: async (
+    userWorkoutExerciseSet: UserWorkoutExerciseSet,
+  ): Promise<UserWorkoutExerciseSet> => {
+    const api = getApiClient();
+    return api.put(
+      `/userWorkoutExerciseSet/${userWorkoutExerciseSet.ID}`,
+      userWorkoutExerciseSet,
+    );
+  },
 };

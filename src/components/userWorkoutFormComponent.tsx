@@ -7,6 +7,7 @@ import type { UserWorkoutExerciseSet } from "../types/userWorkoutExerciseSet.typ
 import { useCreateUserWorkoutExerciseSetMutation } from "../hooks/mutations/useUserWorkoutExerciseSetMutation";
 import { ExerciseSelectModal } from "./exercises/exerciseSelectModal";
 import { useGetAllExerciseQuery } from "../hooks/queries/useExercise";
+import { UserWorkoutExerciseSetTable } from "./userWorkoutExerciseSet/userWorkoutExerciseSet";
 
 interface UserWorkoutFormProps {
   userWorkout: UserWorkout;
@@ -56,26 +57,10 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
                 {exercise.ExerciseName}
               </h2>
 
-              <div className="overflow-x-auto">
-                <table className="table table-sm">
-                  <thead>
-                    <tr>
-                      <td>Set</td>
-                      <td>Reps</td>
-                      <td>Weight</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {exercise.UserWorkoutExerciseSets.map((set, index) => (
-                      <tr key={index} className="hover">
-                        <td className="font-semibold">{index + 1}</td>
-                        <td>{set.Reps}</td>
-                        <td>{set.Weight}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <UserWorkoutExerciseSetTable
+                userWorkoutExerciseSets={exercise.UserWorkoutExerciseSets}
+                canUpdateSets={true}
+              />
 
               <div className="card-actions">
                 <button
