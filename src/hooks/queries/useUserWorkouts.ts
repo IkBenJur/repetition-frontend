@@ -11,3 +11,14 @@ export const activeUserWorkoutQuery = () => {
 export const useSuspenseActiveUserWorkout = () => {
   return useSuspenseQuery(activeUserWorkoutQuery());
 };
+
+export const allUserWorkoutsQuery = () => {
+  return queryOptions({
+    queryKey: ["allUserWorkouts"],
+    queryFn: () => userWorkoutService.getAllUserworkouts(),
+  });
+};
+
+export const useSuspenseAllUserWorkoutsQuery = () => {
+  return useSuspenseQuery(allUserWorkoutsQuery());
+};

@@ -16,4 +16,9 @@ export const userWorkoutService = {
     const api = getApiClient();
     return api.put(`/userWorkout/${userWorkoutId}/mark-complete`);
   },
+
+  getAllUserworkouts: async (): Promise<UserWorkout[]> => {
+    const api = getApiClient();
+    return api.get("/userWorkout");
+  },
 };
