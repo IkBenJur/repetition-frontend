@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   activeUserWorkoutQuery,
   useSuspenseActiveUserWorkout,
@@ -6,17 +6,8 @@ import {
 import { UserWorkoutForm } from "../../components/userWorkoutFormComponent";
 
 export const Route = createFileRoute("/_auth/activeWorkout")({
-  loader: ({ context, location }) => {
-    if (context.userToken == null) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
-
-    context.queryClient.ensureQueryData(activeUserWorkoutQuery());
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(activeUserWorkoutQuery());
   },
   pendingComponent: () => <div>Loading...</div>,
   component: RouteComponent,

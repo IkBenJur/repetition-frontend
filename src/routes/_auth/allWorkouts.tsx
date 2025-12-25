@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   allUserWorkoutsQuery,
   useSuspenseAllUserWorkoutsQuery,
@@ -7,16 +7,7 @@ import { formatDate } from "date-fns";
 import { NavLink } from "../-components/nav-link";
 
 export const Route = createFileRoute("/_auth/allWorkouts")({
-  loader: ({ context, location }) => {
-    if (context.userToken == null) {
-      throw redirect({
-        to: "/login",
-        search: {
-          redirect: location.href,
-        },
-      });
-    }
-
+  loader: ({ context }) => {
     context.queryClient.ensureQueryData(allUserWorkoutsQuery());
   },
   pendingComponent: () => <div>Loading...</div>,
