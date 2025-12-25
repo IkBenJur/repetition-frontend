@@ -18,6 +18,7 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
   const createExerciseMutation = useCreateUserWorkoutExerciseMutation();
   const createSetMutation = useCreateUserWorkoutExerciseSetMutation();
   const exerciseQuery = useGetAllExerciseQuery();
+  const canUpdateWorkout = true;
 
   const handleAddExercise = (exerciseId: number, exerciseName: string) => {
     const newExercise: UserWorkoutExercise = {
@@ -58,39 +59,42 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
 
               <UserWorkoutExerciseSetTable
                 userWorkoutExerciseSets={exercise.UserWorkoutExerciseSets}
-                canUpdateSets={true}
+                canUpdateSets={canUpdateWorkout}
               />
 
-              <div className="card-actions">
-                <button
-                  onClick={() => handleAddSet(exercise.ID!)}
-                  disabled={createSetMutation.isPending}
-                  className="btn btn-block bg-base-200 hover:bg-base-100"
-                >
-                  {createSetMutation.isPending ? (
-                    <>
-                      <span className="loading loading-spinner loading-xs"></span>
-                      Adding Set...
-                    </>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
-                  )}
-                  Add set
-                </button>
-              </div>
+              {/* TODO Only when it is that set Id*/}
+              {canUpdateWorkout && (
+                <div className="card-actions">
+                  <button
+                    onClick={() => handleAddSet(exercise.ID!)}
+                    disabled={createSetMutation.isPending}
+                    className="btn btn-block bg-base-200 hover:bg-base-100"
+                  >
+                    {createSetMutation.isPending ? (
+                      <>
+                        <span className="loading loading-spinner loading-xs"></span>
+                        Adding Set...
+                      </>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
+                      </svg>
+                    )}
+                    Add set
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -104,54 +108,58 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
           closeFunction={() => setIsExerciseModalOpen(false)}
         />
 
-        <button
-          onClick={() => setIsExerciseModalOpen(true)}
-          disabled={createExerciseMutation.isPending}
-          className="btn btn-primary btn-block"
-        >
-          {createExerciseMutation.isPending ? (
-            <>
-              <span className="loading loading-spinner loading-sm"></span>
-              Adding Exercise...
-            </>
-          ) : (
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              Add Exercise
-            </>
-          )}
-        </button>
-
-        {createExerciseMutation.isError && (
-          <div role="alert" className="alert alert-error">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
+        {canUpdateWorkout && (
+          <Fragment>
+            <button
+              onClick={() => setIsExerciseModalOpen(true)}
+              disabled={createExerciseMutation.isPending}
+              className="btn btn-primary btn-block"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{createExerciseMutation.error.message}</span>
-          </div>
+              {createExerciseMutation.isPending ? (
+                <>
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Adding Exercise...
+                </>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Add Exercise
+                </>
+              )}
+            </button>
+
+            {createExerciseMutation.isError && (
+              <div role="alert" className="alert alert-error">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>{createExerciseMutation.error.message}</span>
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
     </Fragment>
