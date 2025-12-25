@@ -8,6 +8,7 @@ import { useCreateUserWorkoutExerciseSetMutation } from "../hooks/mutations/useU
 import { ExerciseSelectModal } from "./exercises/exerciseSelectModal";
 import { useGetAllExerciseQuery } from "../hooks/queries/useExercise";
 import { UserWorkoutExerciseSetTable } from "./userWorkoutExerciseSet/userWorkoutExerciseSet";
+import { useUserWorkoutMarkAsCompleteMutation } from "../hooks/mutations/useUserWorkoutMutation";
 
 interface UserWorkoutFormProps {
   userWorkout: UserWorkout;
@@ -18,7 +19,8 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
   const createExerciseMutation = useCreateUserWorkoutExerciseMutation();
   const createSetMutation = useCreateUserWorkoutExerciseSetMutation();
   const exerciseQuery = useGetAllExerciseQuery();
-  const canUpdateWorkout = true;
+  const markWorkoutCompleteMutation = useUserWorkoutMarkAsCompleteMutation();
+  const canUpdateWorkout = !userWorkout.DateEnd;
 
   const handleAddExercise = (exerciseId: number, exerciseName: string) => {
     const newExercise: UserWorkoutExercise = {
@@ -40,13 +42,51 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
     createSetMutation.mutate(newSet);
   };
 
+  const handleMarkWorkoutComplete = (workoutId: number) => {
+    markWorkoutCompleteMutation.mutate(workoutId);
+  };
+
   return (
     <Fragment>
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{userWorkout.Name}</h1>
-        <p className="text-base-content/60">
-          {formatDate(new Date(userWorkout.DateStart), "d MMMM, yyyy")}
-        </p>
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">{userWorkout.Name}</h1>
+          <p className="text-base-content/60">
+            {formatDate(new Date(userWorkout.DateStart), "d MMMM, yyyy")}
+          </p>
+        </div>
+
+        <button
+          onClick={() => handleMarkWorkoutComplete(userWorkout.ID)}
+          // 1. Disable if already finished
+          // 2. Add 'btn-disabled' or 'loading' state during mutation
+          className={`btn btn-success btn-md ${markWorkoutCompleteMutation.isPending ? "loading" : ""}`}
+          disabled={
+            !!userWorkout.DateEnd || markWorkoutCompleteMutation.isPending
+          }
+        >
+          {userWorkout.DateEnd ? (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              Completed
+            </>
+          ) : (
+            "Mark as Complete"
+          )}
+        </button>
       </div>
 
       <div className="space-y-4">
