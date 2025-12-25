@@ -4,4 +4,5 @@ export interface UserWorkoutExerciseSet {
   Reps?: number;
   Weight?: number;
   SetNumber?: number;
+  IsDone: boolean;
 }
