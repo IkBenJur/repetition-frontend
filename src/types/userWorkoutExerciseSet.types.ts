@@ -3,4 +3,5 @@ export interface UserWorkoutExerciseSet {
   UserWorkoutExerciseId: number;
   Reps?: number;
   Weight?: number;
+  SetNumber?: number;
 }

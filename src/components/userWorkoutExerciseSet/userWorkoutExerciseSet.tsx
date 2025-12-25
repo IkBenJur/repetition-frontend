@@ -45,9 +45,9 @@ export const UserWorkoutExerciseSetTable = ({
           </tr>
         </thead>
         <tbody>
-          {userWorkoutExerciseSets.map((set, index) => (
+          {userWorkoutExerciseSets.map((set) => (
             <tr key={set.ID}>
-              <td className="font-semibold">{index + 1}</td>
+              <td className="font-semibold">{set.SetNumber}</td>
               <td>
                 {canUpdateSets ? (
                   <input
