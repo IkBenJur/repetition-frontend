@@ -22,3 +22,10 @@ export const allUserWorkoutsQuery = () => {
 export const useSuspenseAllUserWorkoutsQuery = () => {
   return useSuspenseQuery(allUserWorkoutsQuery());
 };
+
+export const getUserWorkoutQuery = (userWorkoutId: number) => {
+  return queryOptions({
+    queryKey: ["userWorkout", userWorkoutId],
+    queryFn: () => userWorkoutService.getUserworkoutById(userWorkoutId),
+  });
+};

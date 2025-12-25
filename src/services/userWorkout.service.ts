@@ -21,4 +21,9 @@ export const userWorkoutService = {
     const api = getApiClient();
     return api.get("/userWorkout");
   },
+
+  getUserworkoutById: async (userWorkoutId: number): Promise<UserWorkout> => {
+    const api = getApiClient();
+    return api.get(`/userWorkout/${userWorkoutId}`);
+  },
 };

@@ -64,8 +64,11 @@ function RouteComponent() {
               </p>
 
               <div className="card-actions justify-end mt-4">
-                {/* TODO To specific link*/}
-                <NavLink to={"/allWorkouts"} className="btn btn-ghost btn-sm">
+                <NavLink
+                  to={`/userWorkout/$userWorkoutId`}
+                  params={{ userWorkoutId: workout.ID }}
+                  className="btn btn-ghost btn-sm"
+                >
                   View Details
                 </NavLink>
               </div>
