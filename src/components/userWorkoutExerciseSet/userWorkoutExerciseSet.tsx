@@ -53,7 +53,7 @@ export const UserWorkoutExerciseSetTable = ({
                   <input
                     type="number"
                     className="input input-sm input-primary w-20"
-                    value={set.Reps}
+                    value={set.Reps ? set.Reps : ""}
                     onChange={(e) =>
                       handleUpdateRepsForSet(set, e.target.value)
                     }
@@ -67,7 +67,7 @@ export const UserWorkoutExerciseSetTable = ({
                   <input
                     type="number"
                     className="input input-sm input-primary w-20"
-                    value={set.Weight}
+                    value={set.Weight ? set.Weight : ""}
                     onChange={(e) =>
                       handleUpdateWeightForSet(set, e.target.value)
                     }

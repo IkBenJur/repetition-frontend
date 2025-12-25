@@ -33,8 +33,6 @@ export const UserWorkoutForm = ({ userWorkout }: UserWorkoutFormProps) => {
   const handleAddSet = (exerciseId: number) => {
     const newSet: UserWorkoutExerciseSet = {
       UserWorkoutExerciseId: exerciseId,
-      Reps: 5,
-      Weight: 100,
     };
 
     createSetMutation.mutate(newSet);
