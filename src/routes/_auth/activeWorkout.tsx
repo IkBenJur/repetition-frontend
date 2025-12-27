@@ -3,7 +3,7 @@ import {
   activeUserWorkoutQuery,
   useSuspenseActiveUserWorkout,
 } from "../../hooks/queries/useUserWorkouts";
-import { UserWorkoutForm } from "../../components/userWorkoutFormComponent";
+import { UserWorkoutForm } from "../../components/userWorkout.tsx/userWorkoutFormComponent";
 
 export const Route = createFileRoute("/_auth/activeWorkout")({
   loader: async ({ context }) => {

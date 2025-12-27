@@ -1,14 +1,14 @@
 import { formatDate } from "date-fns";
-import type { UserWorkout } from "../types/userWorkouts.types";
+import type { UserWorkout } from "../../types/userWorkouts.types";
 import { Fragment, useState } from "react";
-import { useCreateUserWorkoutExerciseMutation } from "../hooks/mutations/useUserWorkoutExerciseMutation";
-import type { UserWorkoutExercise } from "../types/userWorkoutExercise.types";
-import type { UserWorkoutExerciseSet } from "../types/userWorkoutExerciseSet.types";
-import { useCreateUserWorkoutExerciseSetMutation } from "../hooks/mutations/useUserWorkoutExerciseSetMutation";
-import { ExerciseSelectModal } from "./exercises/exerciseSelectModal";
-import { useGetAllExerciseQuery } from "../hooks/queries/useExercise";
-import { UserWorkoutExerciseSetTable } from "./userWorkoutExerciseSet/userWorkoutExerciseSet";
-import { useUserWorkoutMarkAsCompleteMutation } from "../hooks/mutations/useUserWorkoutMutation";
+import { useCreateUserWorkoutExerciseMutation } from "../../hooks/mutations/useUserWorkoutExerciseMutation";
+import type { UserWorkoutExercise } from "../../types/userWorkoutExercise.types";
+import type { UserWorkoutExerciseSet } from "../../types/userWorkoutExerciseSet.types";
+import { useCreateUserWorkoutExerciseSetMutation } from "../../hooks/mutations/useUserWorkoutExerciseSetMutation";
+import { ExerciseSelectModal } from "../exercises/exerciseSelectModal";
+import { useGetAllExerciseQuery } from "../../hooks/queries/useExercise";
+import { UserWorkoutExerciseSetTable } from "../userWorkoutExerciseSet/userWorkoutExerciseSet";
+import { useUserWorkoutMarkAsCompleteMutation } from "../../hooks/mutations/useUserWorkoutMutation";
 
 interface UserWorkoutFormProps {
   userWorkout: UserWorkout;
