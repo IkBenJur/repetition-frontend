@@ -1,5 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userWorkoutService } from "../../services/userWorkout.service";
+import type {
+  NewUserWorkoutFormData,
+  UserWorkout,
+} from "../../types/userWorkouts.types";
 
 export const useUserWorkoutMarkAsCompleteMutation = () => {
   const queryClient = useQueryClient();
@@ -14,6 +18,28 @@ export const useUserWorkoutMarkAsCompleteMutation = () => {
       }
 
       // TODO Also update for once we have userWorkout specific routes
+    },
+  });
+};
+
+export const useAddUserWorkoutMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userWorkout: NewUserWorkoutFormData) =>
+      userWorkoutService.addNewUserWorkout(userWorkout),
+    onSuccess: (newUserWorkout) => {
+      // The new workout will always be the active workout
+      queryClient.setQueryData<UserWorkout>(
+        ["activeUserWorkout"],
+        (oldData) => {
+          if (!oldData) {
+            return oldData;
+          }
+
+          return newUserWorkout;
+        },
+      );
     },
   });
 };

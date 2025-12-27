@@ -1,5 +1,9 @@
 import type { UserWorkoutExercise } from "./userWorkoutExercise.types";
 
+export interface NewUserWorkoutFormData {
+  Name: string;
+}
+
 export interface UserWorkout {
   ID: number;
   Name: string;

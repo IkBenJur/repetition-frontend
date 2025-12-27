@@ -1,6 +1,7 @@
 import { getApiClient } from "../lib/apiClient";
 import type {
   MarkUserWorkoutAsCompleteResponse,
+  NewUserWorkoutFormData,
   UserWorkout,
 } from "../types/userWorkouts.types";
 
@@ -8,6 +9,13 @@ export const userWorkoutService = {
   getActiveWorkout: async (): Promise<UserWorkout> => {
     const api = getApiClient();
     return api.get("/userWorkout/active");
+  },
+
+  addNewUserWorkout: async (
+    userWorkout: NewUserWorkoutFormData,
+  ): Promise<UserWorkout> => {
+    const api = getApiClient();
+    return api.post("/userWorkout", userWorkout);
   },
 
   markWorkoutAsComplete: async (

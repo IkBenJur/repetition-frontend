@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TestIndexRouteImport } from './routes/test/index'
 import { Route as AuthAllWorkoutsRouteImport } from './routes/_auth/allWorkouts'
 import { Route as AuthActiveWorkoutRouteImport } from './routes/_auth/activeWorkout'
+import { Route as AuthUserWorkoutAddNewRouteImport } from './routes/_auth/userWorkout/add-new'
 import { Route as AuthUserWorkoutUserWorkoutIdRouteImport } from './routes/_auth/userWorkout/$userWorkoutId'
 
 const LoginRoute = LoginRouteImport.update({
@@ -46,6 +47,11 @@ const AuthActiveWorkoutRoute = AuthActiveWorkoutRouteImport.update({
   path: '/activeWorkout',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthUserWorkoutAddNewRoute = AuthUserWorkoutAddNewRouteImport.update({
+  id: '/userWorkout/add-new',
+  path: '/userWorkout/add-new',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthUserWorkoutUserWorkoutIdRoute =
   AuthUserWorkoutUserWorkoutIdRouteImport.update({
     id: '/userWorkout/$userWorkoutId',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/allWorkouts': typeof AuthAllWorkoutsRoute
   '/test': typeof TestIndexRoute
   '/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
+  '/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/allWorkouts': typeof AuthAllWorkoutsRoute
   '/test': typeof TestIndexRoute
   '/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
+  '/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/_auth/allWorkouts': typeof AuthAllWorkoutsRoute
   '/test/': typeof TestIndexRoute
   '/_auth/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
+  '/_auth/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/allWorkouts'
     | '/test'
     | '/userWorkout/$userWorkoutId'
+    | '/userWorkout/add-new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/allWorkouts'
     | '/test'
     | '/userWorkout/$userWorkoutId'
+    | '/userWorkout/add-new'
   id:
     | '__root__'
     | '/'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/_auth/allWorkouts'
     | '/test/'
     | '/_auth/userWorkout/$userWorkoutId'
+    | '/_auth/userWorkout/add-new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthActiveWorkoutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/userWorkout/add-new': {
+      id: '/_auth/userWorkout/add-new'
+      path: '/userWorkout/add-new'
+      fullPath: '/userWorkout/add-new'
+      preLoaderRoute: typeof AuthUserWorkoutAddNewRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/userWorkout/$userWorkoutId': {
       id: '/_auth/userWorkout/$userWorkoutId'
       path: '/userWorkout/$userWorkoutId'
@@ -172,12 +191,14 @@ interface AuthRouteRouteChildren {
   AuthActiveWorkoutRoute: typeof AuthActiveWorkoutRoute
   AuthAllWorkoutsRoute: typeof AuthAllWorkoutsRoute
   AuthUserWorkoutUserWorkoutIdRoute: typeof AuthUserWorkoutUserWorkoutIdRoute
+  AuthUserWorkoutAddNewRoute: typeof AuthUserWorkoutAddNewRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthActiveWorkoutRoute: AuthActiveWorkoutRoute,
   AuthAllWorkoutsRoute: AuthAllWorkoutsRoute,
   AuthUserWorkoutUserWorkoutIdRoute: AuthUserWorkoutUserWorkoutIdRoute,
+  AuthUserWorkoutAddNewRoute: AuthUserWorkoutAddNewRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
