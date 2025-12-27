@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   allUserWorkoutsQuery,
   useSuspenseAllUserWorkoutsQuery,
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_auth/allWorkouts")({
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
   const { data } = useSuspenseAllUserWorkoutsQuery();
   return (
     <div className="container mx-auto p-6">
@@ -26,8 +27,10 @@ function RouteComponent() {
           </p>
         </div>
 
-        <button className="btn btn-primary btn-wide shadow-lg">
-          {/*TODO ADD Handle add new*/}
+        <button
+          onClick={() => navigate({ to: "/userWorkout/add-new" })}
+          className="btn btn-primary btn-wide shadow-lg"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 mr-2"
@@ -67,7 +70,7 @@ function RouteComponent() {
                 <NavLink
                   to={`/userWorkout/$userWorkoutId`}
                   params={{ userWorkoutId: workout.ID }}
-                  className="btn btn-ghost btn-sm"
+                  className="btn btn-ghost  bg-accent-content btn-sm"
                 >
                   View Details
                 </NavLink>
