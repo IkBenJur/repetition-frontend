@@ -82,7 +82,7 @@ export const UserWorkoutExerciseSetTable = ({
                     onChange={(e) =>
                       handleUpdateWeightForSet(set, e.target.value)
                     }
-                    step={0.25}
+                    step={0.125}
                   />
                 ) : (
                   set.Weight

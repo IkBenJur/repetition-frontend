@@ -1,7 +1,12 @@
-import type { UserWorkoutExercise } from "./userWorkoutExercise.types";
+import type {
+  NewUserWorkoutExerciseFormData,
+  UserWorkoutExercise,
+} from "./userWorkoutExercise.types";
 
 export interface NewUserWorkoutFormData {
-  Name: string;
+  name: string;
+
+  userWorkoutExercises?: NewUserWorkoutExerciseFormData[];
 }
 
 export interface UserWorkout {

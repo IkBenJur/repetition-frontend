@@ -1,4 +1,13 @@
-import type { UserWorkoutExerciseSet } from "./userWorkoutExerciseSet.types";
+import type {
+  NewUserWorkoutExerciseSetFormData,
+  UserWorkoutExerciseSet,
+} from "./userWorkoutExerciseSet.types";
+
+export interface NewUserWorkoutExerciseFormData {
+  exerciseId: number;
+
+  userWorkoutExerciseSets?: NewUserWorkoutExerciseSetFormData[];
+}
 
 export interface UserWorkoutExercise {
   ID?: number;
