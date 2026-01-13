@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TestIndexRouteImport } from './routes/test/index'
 import { Route as AuthAllWorkoutsRouteImport } from './routes/_auth/allWorkouts'
 import { Route as AuthActiveWorkoutRouteImport } from './routes/_auth/activeWorkout'
+import { Route as AuthWorkoutTemplateAddNewRouteImport } from './routes/_auth/workout-template/add-new'
 import { Route as AuthUserWorkoutAddNewRouteImport } from './routes/_auth/userWorkout/add-new'
 import { Route as AuthUserWorkoutUserWorkoutIdRouteImport } from './routes/_auth/userWorkout/$userWorkoutId'
 
@@ -47,6 +48,12 @@ const AuthActiveWorkoutRoute = AuthActiveWorkoutRouteImport.update({
   path: '/activeWorkout',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthWorkoutTemplateAddNewRoute =
+  AuthWorkoutTemplateAddNewRouteImport.update({
+    id: '/workout-template/add-new',
+    path: '/workout-template/add-new',
+    getParentRoute: () => AuthRouteRoute,
+  } as any)
 const AuthUserWorkoutAddNewRoute = AuthUserWorkoutAddNewRouteImport.update({
   id: '/userWorkout/add-new',
   path: '/userWorkout/add-new',
@@ -67,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/test': typeof TestIndexRoute
   '/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
   '/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
+  '/workout-template/add-new': typeof AuthWorkoutTemplateAddNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesByTo {
   '/test': typeof TestIndexRoute
   '/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
   '/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
+  '/workout-template/add-new': typeof AuthWorkoutTemplateAddNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +96,7 @@ export interface FileRoutesById {
   '/test/': typeof TestIndexRoute
   '/_auth/userWorkout/$userWorkoutId': typeof AuthUserWorkoutUserWorkoutIdRoute
   '/_auth/userWorkout/add-new': typeof AuthUserWorkoutAddNewRoute
+  '/_auth/workout-template/add-new': typeof AuthWorkoutTemplateAddNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/test'
     | '/userWorkout/$userWorkoutId'
     | '/userWorkout/add-new'
+    | '/workout-template/add-new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/test'
     | '/userWorkout/$userWorkoutId'
     | '/userWorkout/add-new'
+    | '/workout-template/add-new'
   id:
     | '__root__'
     | '/'
@@ -117,6 +129,7 @@ export interface FileRouteTypes {
     | '/test/'
     | '/_auth/userWorkout/$userWorkoutId'
     | '/_auth/userWorkout/add-new'
+    | '/_auth/workout-template/add-new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -170,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthActiveWorkoutRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/workout-template/add-new': {
+      id: '/_auth/workout-template/add-new'
+      path: '/workout-template/add-new'
+      fullPath: '/workout-template/add-new'
+      preLoaderRoute: typeof AuthWorkoutTemplateAddNewRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/userWorkout/add-new': {
       id: '/_auth/userWorkout/add-new'
       path: '/userWorkout/add-new'
@@ -192,6 +212,7 @@ interface AuthRouteRouteChildren {
   AuthAllWorkoutsRoute: typeof AuthAllWorkoutsRoute
   AuthUserWorkoutUserWorkoutIdRoute: typeof AuthUserWorkoutUserWorkoutIdRoute
   AuthUserWorkoutAddNewRoute: typeof AuthUserWorkoutAddNewRoute
+  AuthWorkoutTemplateAddNewRoute: typeof AuthWorkoutTemplateAddNewRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
@@ -199,6 +220,7 @@ const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthAllWorkoutsRoute: AuthAllWorkoutsRoute,
   AuthUserWorkoutUserWorkoutIdRoute: AuthUserWorkoutUserWorkoutIdRoute,
   AuthUserWorkoutAddNewRoute: AuthUserWorkoutAddNewRoute,
+  AuthWorkoutTemplateAddNewRoute: AuthWorkoutTemplateAddNewRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
