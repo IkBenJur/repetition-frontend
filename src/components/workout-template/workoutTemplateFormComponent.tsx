@@ -4,6 +4,7 @@ import {
   useForm,
   useWatch,
   type Control,
+  type FieldErrors,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -38,11 +39,14 @@ const workoutTemplateSchema = z.object({
 });
 
 type FormData = z.infer<typeof workoutTemplateSchema>;
+type Exercise = z.infer<typeof exerciseSchema>;
+type Set = z.infer<typeof setSchema>;
 
 interface ExerciseFieldProps {
   index: number;
   control: Control<FormData>;
-  exerciseName?: string;
+  exerciseName: string;
+  exerciseError?: FieldErrors<Exercise>;
   onRemove: () => void;
 }
 
@@ -50,6 +54,7 @@ const ExerciseField = ({
   index,
   control,
   exerciseName,
+  exerciseError,
   onRemove,
 }: ExerciseFieldProps) => {
   const { fields, append, remove } = useFieldArray({
@@ -106,6 +111,7 @@ const ExerciseField = ({
                     setIndex={setIndex}
                     exerciseIndex={index}
                     control={control}
+                    setError={exerciseError?.sets?.[setIndex]}
                     onRemove={() => remove(setIndex)}
                   />
                 ))}
@@ -145,6 +151,7 @@ interface SetRowProps {
   setIndex: number;
   exerciseIndex: number;
   control: Control<FormData>;
+  setError?: FieldErrors<Set>;
   onRemove: () => void;
 }
 
@@ -152,6 +159,7 @@ const SetRow = ({
   setIndex,
   exerciseIndex,
   control,
+  setError,
   onRemove,
 }: SetRowProps) => {
   const loadPrescription = useWatch({
@@ -169,7 +177,7 @@ const SetRow = ({
       <td>
         <input
           type="number"
-          className="input input-sm w-14"
+          className={`input input-sm w-14 ${setError?.reps ? "input-error" : ""}`}
           placeholder="10"
           {...control.register(
             `exercises.${exerciseIndex}.sets.${setIndex}.reps`,
@@ -181,7 +189,7 @@ const SetRow = ({
       {/* Load Prescription */}
       <td>
         <select
-          className="select select-sm flex-1 min-w-0"
+          className={`select select-sm flex-1 min-w-0 ${setError?.loadPrescription ? "select-error" : ""}`}
           {...control.register(
             `exercises.${exerciseIndex}.sets.${setIndex}.loadPrescription`,
           )}
@@ -197,9 +205,8 @@ const SetRow = ({
         {loadPrescription === "Fixed" && (
           <input
             type="number"
-            className="input input-sm w-12"
             step="0.125"
-            min="0"
+            className={`input input-sm w-14 ${setError?.weight ? "input-error" : ""}`}
             placeholder="0"
             {...control.register(
               `exercises.${exerciseIndex}.sets.${setIndex}.weight`,
@@ -208,20 +215,15 @@ const SetRow = ({
           />
         )}
         {loadPrescription === "Percentage" && (
-          <div className="flex items-center gap-1">
-            <input
-              type="number"
-              className="input input-sm w-12"
-              placeholder="80"
-              step="0.125"
-              min="0"
-              {...control.register(
-                `exercises.${exerciseIndex}.sets.${setIndex}.percentageOfMax`,
-                { valueAsNumber: true },
-              )}
-            />
-            <span className="text-xs">%</span>
-          </div>
+          <input
+            type="number"
+            className={`input input-sm w-14 ${setError?.percentageOfMax ? "input-error" : ""}`}
+            placeholder="80"
+            {...control.register(
+              `exercises.${exerciseIndex}.sets.${setIndex}.percentageOfMax`,
+              { valueAsNumber: true },
+            )}
+          />
         )}
         {loadPrescription === "RPE" && (
           <input
@@ -229,7 +231,7 @@ const SetRow = ({
             min="1"
             max="10"
             step="0.5"
-            className="input input-sm w-12"
+            className={`input input-sm w-14 ${setError?.rpe ? "input-error" : ""}`}
             placeholder="8"
             {...control.register(
               `exercises.${exerciseIndex}.sets.${setIndex}.rpe`,
@@ -363,17 +365,15 @@ export default function WorkoutTemplateForm() {
                 <label className="label">
                   <span className="label-text font-semibold">Exercises</span>
                 </label>
-                {errors.exercises && (
-                  <div className="alert alert-error">
-                    <span>{errors.exercises.message}</span>
-                  </div>
-                )}
                 {fields.map((field, index) => (
+                  // TODO Hand over errors.exercises[index]
+                  // Same for exercise sets
                   <ExerciseField
                     key={field.id}
                     index={index}
                     control={control}
                     exerciseName={field.name || ""}
+                    exerciseError={errors.exercises?.[index]}
                     onRemove={() => remove(index)}
                   />
                 ))}
