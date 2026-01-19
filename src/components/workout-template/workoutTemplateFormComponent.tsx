@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useFieldArray,
   useForm,
   useWatch,
   type Control,
   type FieldErrors,
+  type UseFormSetValue,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ExerciseSelectModal } from "../exercises/exerciseSelectModal";
 import { useGetAllExerciseQuery } from "../../hooks/queries/useExercise";
+import { useAddWorkoutTemplateMutation } from "../../hooks/mutations/useWorkoutTemplateMutation";
+import { LoadPrescriptionTypeId } from "../../types/loadPrescription.types";
 
 // Zod schemas
 const setSchema = z
@@ -17,13 +20,40 @@ const setSchema = z
     reps: z.number().min(1).max(100).optional(),
     loadPrescription: z.enum(["Fixed", "Percentage", "RPE"]),
     weight: z.number().min(0).optional(),
-    percentageOfMax: z.number().min(0).max(100).optional(),
-    rpe: z.number().min(1).max(10).optional(),
+    percentageOfMax: z.number().min(0).optional(),
+    rpe: z.number().min(0).max(10).optional(),
   })
   .refine((data) => data.reps !== undefined && data.reps !== null, {
     message: "Reps is required",
     path: ["reps"],
-  });
+  })
+  .refine(
+    (data) =>
+      data.loadPrescription !== "Fixed" ||
+      (data.weight !== undefined && data.weight !== null),
+    {
+      message: "Weight is required",
+      path: ["weight"],
+    },
+  )
+  .refine(
+    (data) =>
+      data.loadPrescription !== "Percentage" ||
+      (data.percentageOfMax !== undefined && data.percentageOfMax !== null),
+    {
+      message: "Percentage of max is required",
+      path: ["percentageOfMax"],
+    },
+  )
+  .refine(
+    (data) =>
+      data.loadPrescription !== "RPE" ||
+      (data.rpe !== undefined && data.rpe !== null),
+    {
+      message: "RPE is required",
+      path: ["rpe"],
+    },
+  );
 
 const exerciseSchema = z.object({
   exerciseId: z.number(),
@@ -47,6 +77,7 @@ interface ExerciseFieldProps {
   control: Control<FormData>;
   exerciseName: string;
   exerciseError?: FieldErrors<Exercise>;
+  setValue: UseFormSetValue<FormData>;
   onRemove: () => void;
 }
 
@@ -55,6 +86,7 @@ const ExerciseField = ({
   control,
   exerciseName,
   exerciseError,
+  setValue,
   onRemove,
 }: ExerciseFieldProps) => {
   const { fields, append, remove } = useFieldArray({
@@ -112,6 +144,7 @@ const ExerciseField = ({
                     exerciseIndex={index}
                     control={control}
                     setError={exerciseError?.sets?.[setIndex]}
+                    setValue={setValue}
                     onRemove={() => remove(setIndex)}
                   />
                 ))}
@@ -152,6 +185,7 @@ interface SetRowProps {
   exerciseIndex: number;
   control: Control<FormData>;
   setError?: FieldErrors<Set>;
+  setValue: UseFormSetValue<FormData>;
   onRemove: () => void;
 }
 
@@ -161,12 +195,23 @@ const SetRow = ({
   control,
   setError,
   onRemove,
+  setValue,
 }: SetRowProps) => {
   const loadPrescription = useWatch({
     control,
     name: `exercises.${exerciseIndex}.sets.${setIndex}.loadPrescription`,
     defaultValue: "Fixed",
   });
+
+  useEffect(() => {
+    // Clear all prescription fields when loadPrescription changes
+    setValue(`exercises.${exerciseIndex}.sets.${setIndex}.weight`, undefined);
+    setValue(
+      `exercises.${exerciseIndex}.sets.${setIndex}.percentageOfMax`,
+      undefined,
+    );
+    setValue(`exercises.${exerciseIndex}.sets.${setIndex}.rpe`, undefined);
+  }, [loadPrescription, exerciseIndex, setIndex, setValue]);
 
   return (
     <tr>
@@ -272,6 +317,7 @@ const SetRow = ({
 export default function WorkoutTemplateForm() {
   const [exerciseModalIsOpen, setExerciseModalIsOpen] = useState(false);
   const { data, isError, isLoading } = useGetAllExerciseQuery();
+  const addWorkoutTemplateMutation = useAddWorkoutTemplateMutation();
 
   const {
     register,
@@ -280,6 +326,7 @@ export default function WorkoutTemplateForm() {
     reset,
     control,
     setError,
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(workoutTemplateSchema),
     defaultValues: {
@@ -289,10 +336,55 @@ export default function WorkoutTemplateForm() {
     mode: "onSubmit",
   });
 
+  const createLoadPrescription = (set: Set) => {
+    const prescriptions = {
+      Fixed: {
+        typeId: LoadPrescriptionTypeId.FIXED,
+        fixedLoadPrescription: { weight: set.weight || 0 },
+      },
+      Percentage: {
+        typeId: LoadPrescriptionTypeId.PERCENTAGE_OF_MAX,
+        percentageMaxLoadPrescription: { percentage: set.percentageOfMax || 0 },
+      },
+      RPE: {
+        typeId: LoadPrescriptionTypeId.RPE,
+        rpeLoadPrescription: { rpe: set.rpe || 0 },
+      },
+    } as const;
+
+    const prescription =
+      prescriptions[set.loadPrescription as keyof typeof prescriptions];
+
+    return {
+      loadPrescriptionTypeId: prescription.typeId,
+      fixedLoadPrescription:
+        "fixedLoadPrescription" in prescription
+          ? prescription.fixedLoadPrescription
+          : undefined,
+      percentageMaxLoadPrescription:
+        "percentageMaxLoadPrescription" in prescription
+          ? prescription.percentageMaxLoadPrescription
+          : undefined,
+      rpeLoadPrescription:
+        "rpeLoadPrescription" in prescription
+          ? prescription.rpeLoadPrescription
+          : undefined,
+    };
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
-      console.log("Template submitted:", data);
-      alert("Template saved! Check console for data.");
+      addWorkoutTemplateMutation.mutate({
+        name: data.name,
+        templateExercises: data.exercises.map((exercise) => ({
+          exerciseId: exercise.exerciseId,
+          templateSets: exercise.sets.map((set) => ({
+            repGoal: set.reps || 0,
+            ...createLoadPrescription(set),
+          })),
+        })),
+      });
+
       reset();
     } catch (error) {
       console.error("Error creating template:", error);
@@ -374,6 +466,7 @@ export default function WorkoutTemplateForm() {
                     control={control}
                     exerciseName={field.name || ""}
                     exerciseError={errors.exercises?.[index]}
+                    setValue={setValue}
                     onRemove={() => remove(index)}
                   />
                 ))}
